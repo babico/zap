@@ -23,6 +23,7 @@ package zapcore
 import (
 	"fmt"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -90,6 +91,9 @@ func (ec EntryCaller) FullPath() string {
 	buf.AppendString(ec.File)
 	buf.AppendByte(':')
 	buf.AppendInt(int64(ec.Line))
+	for i := 0; i < 8-len(strconv.Itoa(ec.Line)); i++ {
+		buf.AppendString(" ")
+	}
 	caller := buf.String()
 	buf.Free()
 	return caller
@@ -128,6 +132,9 @@ func (ec EntryCaller) TrimmedPath() string {
 	buf.AppendString(ec.File[idx+1:])
 	buf.AppendByte(':')
 	buf.AppendInt(int64(ec.Line))
+	for i := 0; i < 8-len(strconv.Itoa(ec.Line)); i++ {
+		buf.AppendString(" ")
+	}
 	caller := buf.String()
 	buf.Free()
 	return caller

@@ -23,6 +23,8 @@ package zapcore
 import (
 	"encoding/json"
 	"io"
+	"strconv"
+	"strings"
 	"time"
 
 	"go.uber.org/zap/buffer"
@@ -274,19 +276,25 @@ func (e *DurationEncoder) UnmarshalText(text []byte) error {
 //
 // This function must make exactly one call
 // to a PrimitiveArrayEncoder's Append* method.
-type CallerEncoder func(EntryCaller, PrimitiveArrayEncoder)
+type CallerEncoder func(EntryCaller, PrimitiveArrayEncoder, bool)
 
 // FullCallerEncoder serializes a caller in /full/path/to/package/file:line
 // format.
-func FullCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
+func FullCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder, isSugar bool) {
 	// TODO: consider using a byte-oriented API to save an allocation.
+	if isSugar && 6-len(strconv.Itoa(caller.Line)) > 0 {
+		enc.AppendString(caller.String()[:strings.Index(caller.String(), ":")+1] + strconv.Itoa(caller.Line))
+	}
 	enc.AppendString(caller.String())
 }
 
 // ShortCallerEncoder serializes a caller in package/file:line format, trimming
 // all but the final directory from the full path.
-func ShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
+func ShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder, isSugar bool) {
 	// TODO: consider using a byte-oriented API to save an allocation.
+	if isSugar && 8-len(strconv.Itoa(caller.Line)) > 0 {
+		enc.AppendString(caller.String()[:strings.Index(caller.String(), ":")+1] + strconv.Itoa(caller.Line))
+	}
 	enc.AppendString(caller.TrimmedPath())
 }
 

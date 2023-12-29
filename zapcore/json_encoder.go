@@ -397,7 +397,7 @@ func (enc *jsonEncoder) EncodeEntry(ent Entry, fields []Field) (*buffer.Buffer, 
 		if final.CallerKey != "" {
 			final.addKey(final.CallerKey)
 			cur := final.buf.Len()
-			final.EncodeCaller(ent.Caller, final)
+			final.EncodeCaller(ent.Caller, final, true)
 			if cur == final.buf.Len() {
 				// User-supplied EncodeCaller was a no-op. Fall back to strings to
 				// keep output JSON valid.
