@@ -693,7 +693,7 @@ func TestCallerEncoders(t *testing.T) {
 		assertAppended(
 			t,
 			tt.expected,
-			func(arr ArrayEncoder) { ce(caller, arr) },
+			func(arr ArrayEncoder) { ce(caller, arr, true) },
 			"Unexpected output serializing file name as %v with %q.", tt.expected, tt.name,
 		)
 	}
