@@ -290,14 +290,18 @@ func ShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
 	enc.AppendString(caller.TrimmedPath())
 }
 
-func SpecialShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
-	// TODO: consider using a byte-oriented API to save an allocation.
-	enc.AppendString(caller.SpecialTrimmedPath())
-}
-
+// SpecialFullCallerEncoder serializes a caller in /full/path/to/package/file:line
+// format.
 func SpecialFullCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
 	// TODO: consider using a byte-oriented API to save an allocation.
 	enc.AppendString(caller.SpecialFullPath())
+}
+
+// SpecialShortCallerEncoder serializes a caller in package/file:line format, trimming
+// all but the final directory from the full path.
+func SpecialShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
+	// TODO: consider using a byte-oriented API to save an allocation.
+	enc.AppendString(caller.SpecialTrimmedPath())
 }
 
 // UnmarshalText unmarshals text to a CallerEncoder. "full" is unmarshaled to
