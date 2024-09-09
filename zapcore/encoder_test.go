@@ -465,7 +465,7 @@ func TestEncoderConfiguration(t *testing.T) {
 				EncodeTime:     base.EncodeTime,
 				EncodeDuration: base.EncodeDuration,
 				EncodeLevel:    base.EncodeLevel,
-				EncodeCaller:   func(EntryCaller, PrimitiveArrayEncoder) {},
+				EncodeCaller:   func(EntryCaller, PrimitiveArrayEncoder, bool) {},
 			},
 			expectedJSON:    `{"L":"info","T":0,"N":"main","C":"foo.go:42","F":"foo.Foo","M":"hello","S":"fake-stack"}` + "\n",
 			expectedConsole: "0\tinfo\tmain\tfoo.Foo\thello\nfake-stack\n",
