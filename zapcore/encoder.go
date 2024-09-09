@@ -276,26 +276,36 @@ func (e *DurationEncoder) UnmarshalText(text []byte) error {
 //
 // This function must make exactly one call
 // to a PrimitiveArrayEncoder's Append* method.
-type CallerEncoder func(EntryCaller, PrimitiveArrayEncoder, bool)
+type CallerEncoder func(EntryCaller, PrimitiveArrayEncoder)
 
 // FullCallerEncoder serializes a caller in /full/path/to/package/file:line
 // format.
-func FullCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder, isSugar bool) {
+func FullCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
 	// TODO: consider using a byte-oriented API to save an allocation.
-	if isSugar && 6-len(strconv.Itoa(caller.Line)) > 0 {
-		enc.AppendString(caller.String()[:strings.Index(caller.String(), ":")+1] + strconv.Itoa(caller.Line))
-	}
 	enc.AppendString(caller.String())
 }
 
 // ShortCallerEncoder serializes a caller in package/file:line format, trimming
 // all but the final directory from the full path.
-func ShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder, isSugar bool) {
+func ShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
 	// TODO: consider using a byte-oriented API to save an allocation.
-	if isSugar && 8-len(strconv.Itoa(caller.Line)) > 0 {
+	enc.AppendString(caller.TrimmedPath())
+}
+
+func SpecialShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
+	// TODO: consider using a byte-oriented API to save an allocation.
+	if 6-len(strconv.Itoa(caller.Line)) > 0 {
 		enc.AppendString(caller.String()[:strings.Index(caller.String(), ":")+1] + strconv.Itoa(caller.Line))
 	}
-	enc.AppendString(caller.TrimmedPath())
+	enc.AppendString(caller.SpecialTrimmedPath())
+}
+
+func SpecialFullCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
+	// TODO: consider using a byte-oriented API to save an allocation.
+	if 8-len(strconv.Itoa(caller.Line)) > 0 {
+		enc.AppendString(caller.String()[:strings.Index(caller.String(), ":")+1] + strconv.Itoa(caller.Line))
+	}
+	enc.AppendString(caller.SpecialFullPath())
 }
 
 // UnmarshalText unmarshals text to a CallerEncoder. "full" is unmarshaled to

@@ -99,9 +99,71 @@ func (ec EntryCaller) FullPath() string {
 	return caller
 }
 
+// SpecialFullPath returns a /full/path/to/package/file:line description of the
+// caller, with the line number padded to 8 characters. This is useful for
+// aligning the line numbers in a log output.
+func (ec EntryCaller) SpecialFullPath() string {
+	if !ec.Defined {
+		return "undefined"
+	}
+	buf := bufferpool.Get()
+	buf.AppendString(ec.File)
+	buf.AppendByte(':')
+	buf.AppendInt(int64(ec.Line))
+	for i := 0; i < 8-len(strconv.Itoa(ec.Line)); i++ {
+		buf.AppendString(" ")
+	}
+	caller := buf.String()
+	buf.Free()
+	return caller
+}
+
 // TrimmedPath returns a package/file:line description of the caller,
 // preserving only the leaf directory name and file name.
 func (ec EntryCaller) TrimmedPath() string {
+	if !ec.Defined {
+		return "undefined"
+	}
+	// nb. To make sure we trim the path correctly on Windows too, we
+	// counter-intuitively need to use '/' and *not* os.PathSeparator here,
+	// because the path given originates from Go stdlib, specifically
+	// runtime.Caller() which (as of Mar/17) returns forward slashes even on
+	// Windows.
+	//
+	// See https://github.com/golang/go/issues/3335
+	// and https://github.com/golang/go/issues/18151
+	//
+	// for discussion on the issue on Go side.
+	//
+	// Find the last separator.
+	//
+	idx := strings.LastIndexByte(ec.File, '/')
+	if idx == -1 {
+		return ec.FullPath()
+	}
+	// Find the penultimate separator.
+	idx = strings.LastIndexByte(ec.File[:idx], '/')
+	if idx == -1 {
+		return ec.FullPath()
+	}
+	buf := bufferpool.Get()
+	// Keep everything after the penultimate separator.
+	buf.AppendString(ec.File[idx+1:])
+	buf.AppendByte(':')
+	buf.AppendInt(int64(ec.Line))
+	for i := 0; i < 8-len(strconv.Itoa(ec.Line)); i++ {
+		buf.AppendString(" ")
+	}
+	caller := buf.String()
+	buf.Free()
+	return caller
+}
+
+// SpecialTrimmedPath returns a package/file:line description of the caller,
+// preserving only the leaf directory name and file name, with the line number
+// padded to 8 characters. This is useful for aligning the line numbers in a
+// log output.
+func (ec EntryCaller) SpecialTrimmedPath() string {
 	if !ec.Defined {
 		return "undefined"
 	}

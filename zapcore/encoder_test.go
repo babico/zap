@@ -465,7 +465,7 @@ func TestEncoderConfiguration(t *testing.T) {
 				EncodeTime:     base.EncodeTime,
 				EncodeDuration: base.EncodeDuration,
 				EncodeLevel:    base.EncodeLevel,
-				EncodeCaller:   func(EntryCaller, PrimitiveArrayEncoder, bool) {},
+				EncodeCaller:   func(EntryCaller, PrimitiveArrayEncoder) {},
 			},
 			expectedJSON:    `{"L":"info","T":0,"N":"main","C":"foo.go:42","F":"foo.Foo","M":"hello","S":"fake-stack"}` + "\n",
 			expectedConsole: "0\tinfo\tmain\tfoo.Foo\thello\nfake-stack\n",
@@ -526,6 +526,24 @@ func TestEncoderConfiguration(t *testing.T) {
 			},
 			expectedJSON:    `{"L":"info","T":0,"N":"main","C":"foo.go:42","F":"foo.Foo","M":"hello","S":"fake-stack"}` + DefaultLineEnding,
 			expectedConsole: "0\tinfo\tmain\tfoo.go:42\tfoo.Foo\thello\nfake-stack" + DefaultLineEnding,
+		},
+		{
+			desc: "handle special EncodeCaller type for short",
+			cfg: EncoderConfig{
+				LevelKey:       "L",
+				TimeKey:        "T",
+				MessageKey:     "M",
+				NameKey:        "N",
+				CallerKey:      "C",
+				FunctionKey:    "F",
+				StacktraceKey:  "S",
+				EncodeTime:     base.EncodeTime,
+				EncodeDuration: base.EncodeDuration,
+				EncodeLevel:    base.EncodeLevel,
+				EncodeCaller:   SpecialShortCallerEncoder,
+			},
+			expectedJSON:    `{"L":"info","T":0,"N":"main","C":"foo.go:42","foo.go:42      ","F":"foo.Foo","M":"hello","S":"fake-stack"}` + DefaultLineEnding,
+			expectedConsole: "0\tinfo\tmain\tfoo.go:42      \tfoo.Foo\thello\nfake-stack" + DefaultLineEnding,
 		},
 	}
 
@@ -693,7 +711,7 @@ func TestCallerEncoders(t *testing.T) {
 		assertAppended(
 			t,
 			tt.expected,
-			func(arr ArrayEncoder) { ce(caller, arr, true) },
+			func(arr ArrayEncoder) { ce(caller, arr) },
 			"Unexpected output serializing file name as %v with %q.", tt.expected, tt.name,
 		)
 	}
