@@ -23,8 +23,6 @@ package zapcore
 import (
 	"encoding/json"
 	"io"
-	"strconv"
-	"strings"
 	"time"
 
 	"go.uber.org/zap/buffer"
@@ -294,17 +292,11 @@ func ShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
 
 func SpecialShortCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
 	// TODO: consider using a byte-oriented API to save an allocation.
-	if 6-len(strconv.Itoa(caller.Line)) > 0 {
-		enc.AppendString(caller.String()[:strings.Index(caller.String(), ":")+1] + strconv.Itoa(caller.Line))
-	}
 	enc.AppendString(caller.SpecialTrimmedPath())
 }
 
 func SpecialFullCallerEncoder(caller EntryCaller, enc PrimitiveArrayEncoder) {
 	// TODO: consider using a byte-oriented API to save an allocation.
-	if 8-len(strconv.Itoa(caller.Line)) > 0 {
-		enc.AppendString(caller.String()[:strings.Index(caller.String(), ":")+1] + strconv.Itoa(caller.Line))
-	}
 	enc.AppendString(caller.SpecialFullPath())
 }
 
@@ -374,6 +366,8 @@ type EncoderConfig struct {
 	// Configures the field separator used by the console encoder. Defaults
 	// to tab.
 	ConsoleSeparator string `json:"consoleSeparator" yaml:"consoleSeparator"`
+	// Configures the length of paths to be used in the caller encoder.
+	SpecialEncodeCallerLength int `json:"specialEncodeCallerLength" yaml:"specialEncodeCallerLength"`
 }
 
 // ObjectEncoder is a strongly-typed, encoding-agnostic interface for adding a

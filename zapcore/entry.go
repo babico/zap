@@ -74,6 +74,7 @@ type EntryCaller struct {
 	File     string
 	Line     int
 	Function string
+	Length   int
 }
 
 // String returns the full path and line number of the caller.
@@ -107,7 +108,7 @@ func (ec EntryCaller) SpecialFullPath() string {
 	buf.AppendString(ec.File)
 	buf.AppendByte(':')
 	buf.AppendInt(int64(ec.Line))
-	for i := 0; i < 8-len(strconv.Itoa(ec.Line)); i++ {
+	for i := 0; i < ec.Length-(len(ec.File)+1+len(strconv.Itoa(ec.Line))); i++ {
 		buf.AppendString(" ")
 	}
 	caller := buf.String()
@@ -188,7 +189,7 @@ func (ec EntryCaller) SpecialTrimmedPath() string {
 	buf.AppendString(ec.File[idx+1:])
 	buf.AppendByte(':')
 	buf.AppendInt(int64(ec.Line))
-	for i := 0; i < 8-len(strconv.Itoa(ec.Line)); i++ {
+	for i := 0; i < ec.Length-(len(ec.File[idx+1:])+1+len(strconv.Itoa(ec.Line))); i++ {
 		buf.AppendString(" ")
 	}
 	caller := buf.String()
