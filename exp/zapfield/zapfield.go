@@ -22,8 +22,8 @@
 package zapfield
 
 import (
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"github.com/babico/zap"
+	"github.com/babico/zap/zapcore"
 )
 
 // Str constructs a field with the given string-like key and value.

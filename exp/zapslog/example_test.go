@@ -28,8 +28,8 @@ import (
 	"net"
 	"time"
 
-	"go.uber.org/zap"
-	"go.uber.org/zap/exp/zapslog"
+	"github.com/babico/zap"
+	"github.com/babico/zap/exp/zapslog"
 )
 
 type Password string

@@ -27,10 +27,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/babico/zap/internal/bufferpool"
+	"github.com/babico/zap/internal/exit"
+	"github.com/babico/zap/internal/pool"
 	"go.uber.org/multierr"
-	"go.uber.org/zap/internal/bufferpool"
-	"go.uber.org/zap/internal/exit"
-	"go.uber.org/zap/internal/pool"
 )
 
 var _cePool = pool.New(func() *CheckedEntry {

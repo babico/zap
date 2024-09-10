@@ -30,7 +30,7 @@ import (
 	"strings"
 	"sync"
 
-	"go.uber.org/zap/zapcore"
+	"github.com/babico/zap/zapcore"
 )
 
 const schemeFile = "file"

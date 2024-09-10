@@ -27,8 +27,8 @@ import (
 	"os"
 	"time"
 
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"github.com/babico/zap"
+	"github.com/babico/zap/zapcore"
 )
 
 func Example_presets() {

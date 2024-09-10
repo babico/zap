@@ -1,4 +1,4 @@
-module go.uber.org/zap
+module github.com/babico/zap
 
 go 1.19
 

@@ -28,12 +28,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/babico/zap"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.uber.org/zap"
 
 	//revive:disable:dot-imports
-	. "go.uber.org/zap/zapcore"
+	. "github.com/babico/zap/zapcore"
 )
 
 type users int

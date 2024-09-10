@@ -31,7 +31,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	//revive:disable:dot-imports
-	. "go.uber.org/zap/zapcore"
+	. "github.com/babico/zap/zapcore"
 )
 
 var (

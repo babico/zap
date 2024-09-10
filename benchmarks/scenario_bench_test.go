@@ -26,8 +26,8 @@ import (
 	"log/slog"
 	"testing"
 
-	"go.uber.org/zap"
-	"go.uber.org/zap/internal/ztest"
+	"github.com/babico/zap"
+	"github.com/babico/zap/internal/ztest"
 )
 
 func BenchmarkDisabledWithoutFields(b *testing.B) {

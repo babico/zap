@@ -30,7 +30,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"go.uber.org/zap/zapcore"
+	"github.com/babico/zap/zapcore"
 )
 
 func stubSinkRegistry(t testing.TB) *sinkRegistry {

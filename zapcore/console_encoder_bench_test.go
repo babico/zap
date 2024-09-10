@@ -24,7 +24,7 @@ import (
 	"testing"
 
 	//revive:disable:dot-imports
-	. "go.uber.org/zap/zapcore"
+	. "github.com/babico/zap/zapcore"
 )
 
 func BenchmarkZapConsole(b *testing.B) {

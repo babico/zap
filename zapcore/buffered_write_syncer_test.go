@@ -25,9 +25,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/babico/zap/internal/ztest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.uber.org/zap/internal/ztest"
 )
 
 func TestBufferWriter(t *testing.T) {

@@ -1,10 +1,10 @@
-module go.uber.org/zap/zapgrpc/internal/test
+module github.com/babico/zap/zapgrpc/internal/test
 
 go 1.17
 
 require (
 	github.com/stretchr/testify v1.8.1
-	go.uber.org/zap v1.16.0
+	github.com/babico/zap v1.16.0
 	google.golang.org/grpc v1.42.0
 )
 
@@ -18,4 +18,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace go.uber.org/zap => ../../..
+replace github.com/babico/zap => ../../..
